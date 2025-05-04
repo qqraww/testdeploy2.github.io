@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Windows Text</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet">
+  <link rel="preload" href="./fonts/Inter-900.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('./fonts/Inter-900.woff2') format('woff2');
+      font-weight: 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    body, html {
+      margin: 0; padding: 0;
+      width: 100vw; height: 100vh;
+      overflow: hidden;
+      background: #000;
+    }
+    .video-mask-container {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90vw; height: 90vw; max-width: 900px; max-height: 900px;
+      aspect-ratio: 1/1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: #000;
+    }
+    .bg-video {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+    .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .hero-block {
+      position: relative;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      z-index: 3;
+      overflow: hidden;
+      pointer-events: auto;
+    }
+    .hero-line {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      font-size: min(7vw, 7vh, 7rem);
+      font-family: 'Inter', Arial, sans-serif;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.05;
+      margin-bottom: 0.1em;
+      white-space: nowrap;
+    }
+    .hero-text {
+      color: #fff;
+      font-family: inherit;
+      font-weight: inherit;
+      font-size: inherit;
+      letter-spacing: -0.04em;
+      margin: 0 0.18em 0 0.18em;
+      display: inline;
+      white-space: nowrap;
+      z-index: 4;
+      position: relative;
+    }
+    .censor {
+      display: inline-block;
+      width: 0; height: 0;
+    }
+    .video-window {
+      position: absolute;
+      overflow: hidden;
+      border-radius: 0.18em;
+      z-index: 2;
+      background: #000;
+    }
+    .video-window video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .window1 { left: 350px; top: 300px; width: 320px; height: 68px; }
+    .window2 { left: 255px; top: 375px; width: 110px; height: 68px; }
+    .window3 { left: 350px; top: 450px; width: 250px; height: 68px; }
+    .window4 { left: 390px; top: 530px; width: 650px; height: 68px; }
+    @media (max-width: 900px) {
+      .video-mask-container { 
+        max-width: 98vw; 
+        max-height: 98vw; 
+      }
+      .hero-line { 
+        font-size: clamp(1.2rem, 10vw, 3.5rem); 
+      }
+      .window1 { 
+        left: calc(350px * 0.8); 
+        top: calc(300px * 0.8); 
+        width: calc(320px * 0.8); 
+        height: calc(68px * 0.8); 
+      }
+      .window2 { 
+        left: calc(255px * 0.8); 
+        top: calc(375px * 0.8); 
+        width: calc(110px * 0.8); 
+        height: calc(68px * 0.8); 
+      }
+      .window3 { 
+        left: calc(350px * 0.8); 
+        top: calc(450px * 0.8); 
+        width: calc(250px * 0.8); 
+        height: calc(68px * 0.8); 
+      }
+      .window4 { 
+        left: calc(390px * 0.8); 
+        top: calc(530px * 0.8); 
+        width: calc(650px * 0.8); 
+        height: calc(68px * 0.8); 
+      }
+    }
+    @media (max-width: 600px) {
+      .hero-block { gap: 1vw; }
+      .hero-line { 
+        flex-wrap: wrap; 
+        font-size: clamp(1rem, 8vw, 2.5rem);
+      }
+      .window1 { 
+        left: calc(350px * 0.6); 
+        top: calc(300px * 0.6); 
+        width: calc(320px * 0.6); 
+        height: calc(68px * 0.6); 
+      }
+      .window2 { 
+        left: calc(255px * 0.6); 
+        top: calc(375px * 0.6); 
+        width: calc(110px * 0.6); 
+        height: calc(68px * 0.6); 
+      }
+      .window3 { 
+        left: calc(350px * 0.6); 
+        top: calc(450px * 0.6); 
+        width: calc(250px * 0.6); 
+        height: calc(68px * 0.6); 
+      }
+      .window4 { 
+        left: calc(390px * 0.6); 
+        top: calc(530px * 0.6); 
+        width: calc(650px * 0.6); 
+        height: calc(68px * 0.6); 
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="video-mask-container">
+    <div class="overlay">
+      <div class="hero-block">
+        <div class="hero-line">
+          <span class="hero-text">We're here</span>
+          <span class="censor window1"></span>
+          <span class="hero-text">to make</span>
+        </div>
+        <div class="hero-line">
+          <span class="hero-text">healthy</span>
+          <span class="censor window2"></span>
+          <span class="hero-text">living effortless,</span>
+        </div>
+        <div class="hero-line">
+          <span class="hero-text">so you can</span>
+          <span class="censor window3"></span>
+          <span class="hero-text">live longer</span>
+        </div>
+        <div class="hero-line">
+          <span class="hero-text">and happier</span>
+          <span class="censor window4"></span>
+        </div>
+      </div>
+      <div class="video-window window1">
+        <video src="video.mp4" autoplay loop muted playsinline></video>
+      </div>
+      <div class="video-window window2">
+        <video src="video.mp4" autoplay loop muted playsinline></video>
+      </div>
+      <div class="video-window window3">
+        <video src="video.mp4" autoplay loop muted playsinline></video>
+      </div>
+      <div class="video-window window4">
+        <video src="video.mp4" autoplay loop muted playsinline></video>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const mainVideo = document.querySelector('.bg-video');
+      const windowVideos = document.querySelectorAll('.video-window video');
+      
+      function syncVideos() {
+        const currentTime = mainVideo.currentTime;
+        windowVideos.forEach(video => {
+          if (Math.abs(video.currentTime - currentTime) > 0.1) {
+            video.currentTime = currentTime;
+          }
+        });
+      }
+      
+      mainVideo.play().then(() => {
+        windowVideos.forEach(video => {
+          video.currentTime = mainVideo.currentTime;
+          video.play();
+        });
+      });
+      
+      setInterval(syncVideos, 100);
+      mainVideo.addEventListener('timeupdate', syncVideos);
+    });
+  </script>
+</body>
+</html> 
